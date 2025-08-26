@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Tebak Angka</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TDKVR9BY1D"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-TDKVR9BY1D');
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Deteksi info perangkat
+    const userAgent = navigator.userAgent;
+    const platform = navigator.platform;
+    const screenRes = `${screen.width}x${screen.height}`;
+
+    // Kirim ke Google Analytics sebagai event custom
+    gtag('event', 'device_info', {
+        device_user_agent: userAgent,
+        device_platform: platform,
+        device_resolution: screenRes
+    });
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function detectDevice() {
+        const ua = navigator.userAgent;
+        let device = "Unknown Device";
+
+        if (/android/i.test(ua)) {
+            const match = ua.match(/Android\s[\d.]+;\s(.+?)\sBuild/);
+            device = match ? match[1] : "Android Device";
+        } 
+        else if (/iPad|iPhone|iPod/.test(ua)) {
+            device = "Apple " + (/iPad/.test(ua) ? "iPad" : "iPhone");
+        } 
+        else if (/Windows NT/i.test(ua)) {
+            device = "Windows PC";
+        } 
+        else if (/Macintosh/i.test(ua)) {
+            device = "MacBook / iMac";
+        } 
+        else if (/Linux/i.test(ua)) {
+            device = "Linux Device";
+        }
+
+        return device;
+    }
+
+    const deviceName = detectDevice();
+    const platform = navigator.platform;
+    const screenRes = `${screen.width}x${screen.height}`;
+
+    gtag('event', 'device_info', {
+        device_name: deviceName,
+        device_platform: platform,
+        device_resolution: screenRes
+    });
+});
+</script>
+
+   <style>
+      /* Reset default styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, rgb(240, 80, 176), #e780c8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #fff;
+        overflow: hidden;
+      }
+
+      .game-container {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        width: 320px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        transition: all 0.5s ease;
+      }
+
+      .game-container:hover {
+        transform: scale(1.05);
+      }
+
+      h1 {
+        font-size: 28px;
+        color: #ff4081;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 600;
+      }
+
+      p {
+        font-size: 16px;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      input {
+        width: 80%;
+        padding: 12px;
+        font-size: 18px;
+        border: 2px solid #ff4081;
+        border-radius: 10px;
+        background: #fff;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: #ff80ab;
+        box-shadow: 0 0 5px rgba(255, 128, 171, 0.8);
+      }
+
+      button {
+        width: 80%;
+        padding: 14px;
+        font-size: 18px;
+        background: #ff4081;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s;
+      }
+
+      button:hover {
+        background: #ff80ab;
+        transform: translateY(-5px);
+      }
+
+      #feedback {
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+
+      #attempts {
+        font-size: 16px;
+        margin-top: 10px;
+        color: #ff80ab;
+      }
+
+      /* Menu game lain */
+      .game-menu {
+        margin-top: 30px;
+      }
+      .menu-btn {
+        background: #ff80ab;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        margin: 5px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .menu-btn:hover {
+        background: #ff4081;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <h1>Game Tebak Angka</h1>
+      <p>halaww, coba tebak angka antara 1 sampe 100 !!!</p>
+      <input type="number" id="input-tebakan" placeholder="masukkin tebakanmu" />
+      <button onclick="cekTebakan()">tebak!!!!</button>
+      <p id="feedback"></p>
+      <p id="attempts"></p>
+
+      <!-- Menu Pilihan Game -->
+      <div class="game-menu">
+        <h2 style="color:#ff4081; font-size:18px;">pilih game lain:</h2>
+        <button class="menu-btn" onclick="location.href='bird.html'">🐦 flappy pink bird</button>
+        <button class="menu-btn" onclick="location.href='puzzle.html'">🧩 sliding puzzle</button>
+      </div>
+    </div>
+
+    <script>
+      let angkaRahasia = Math.floor(Math.random() * 100) + 1;
+      let attempts = 0;
+
+      function cekTebakan() {
+        const tebakan = document.getElementById("input-tebakan").value;
+        const feedback = document.getElementById("feedback");
+        const attemptsText = document.getElementById("attempts");
+
+        if (tebakan === "") {
+          feedback.textContent = "masukkin angkanyaa!";
+          feedback.style.color = "red";
+          return;
+        }
+
+        attempts++;
+
+        if (tebakan < angkaRahasia) {
+          feedback.textContent = " terlalu rendah!!";
+          feedback.style.color = "#ff80ab";
+        } else if (tebakan > angkaRahasia) {
+          feedback.textContent = "ketinggiannnnn!";
+          feedback.style.color = "#ff80ab";
+        } else {
+          feedback.textContent = `congrats orang jeniuss! angka yang benar adalah ${angkaRahasia}.`;
+          feedback.style.color = "#ff4081";
+          attemptsText.textContent = `km berhasil dalam ${attempts} percobaan.`;
+          return;  
+        }
+
+        attemptsText.textContent = `percobaan ke-${attempts}`;
+      }
+    </script>
+  </body>  
+</html>
