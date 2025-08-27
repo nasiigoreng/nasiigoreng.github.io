@@ -4,70 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Game Tebak Angka</title>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TDKVR9BY1D"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-TDKVR9BY1D');
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    // Deteksi info perangkat
-    const userAgent = navigator.userAgent;
-    const platform = navigator.platform;
-    const screenRes = `${screen.width}x${screen.height}`;
-
-    // Kirim ke Google Analytics sebagai event custom
-    gtag('event', 'device_info', {
-        device_user_agent: userAgent,
-        device_platform: platform,
-        device_resolution: screenRes
-    });
-});
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    function detectDevice() {
-        const ua = navigator.userAgent;
-        let device = "Unknown Device";
-
-        if (/android/i.test(ua)) {
-            const match = ua.match(/Android\s[\d.]+;\s(.+?)\sBuild/);
-            device = match ? match[1] : "Android Device";
-        } 
-        else if (/iPad|iPhone|iPod/.test(ua)) {
-            device = "Apple " + (/iPad/.test(ua) ? "iPad" : "iPhone");
-        } 
-        else if (/Windows NT/i.test(ua)) {
-            device = "Windows PC";
-        } 
-        else if (/Macintosh/i.test(ua)) {
-            device = "MacBook / iMac";
-        } 
-        else if (/Linux/i.test(ua)) {
-            device = "Linux Device";
-        }
-
-        return device;
-    }
-
-    const deviceName = detectDevice();
-    const platform = navigator.platform;
-    const screenRes = `${screen.width}x${screen.height}`;
-
-    gtag('event', 'device_info', {
-        device_name: deviceName,
-        device_platform: platform,
-        device_resolution: screenRes
-    });
-});
-</script>
-
-   <style>
-      /* Reset default styles */
+    <style>
       * {
         margin: 0;
         padding: 0;
@@ -161,7 +99,6 @@ document.addEventListener("DOMContentLoaded", function () {
         color: #ff80ab;
       }
 
-      /* Menu game lain */
       .game-menu {
         margin-top: 30px;
       }
@@ -190,7 +127,6 @@ document.addEventListener("DOMContentLoaded", function () {
       <p id="feedback"></p>
       <p id="attempts"></p>
 
-      <!-- Menu Pilihan Game -->
       <div class="game-menu">
         <h2 style="color:#ff4081; font-size:18px;">pilih game lain:</h2>
         <button class="menu-btn" onclick="location.href='bird.html'">🐦 flappy pink bird</button>
@@ -213,23 +149,34 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
 
+        const tebakanNum = parseInt(tebakan);
         attempts++;
 
-        if (tebakan < angkaRahasia) {
-          feedback.textContent = " terlalu rendah!!";
-          feedback.style.color = "#ff80ab";
-        } else if (tebakan > angkaRahasia) {
-          feedback.textContent = "ketinggiannnnn!";
-          feedback.style.color = "#ff80ab";
-        } else {
+        if (tebakanNum === angkaRahasia) {
           feedback.textContent = `congrats orang jeniuss! angka yang benar adalah ${angkaRahasia}.`;
           feedback.style.color = "#ff4081";
           attemptsText.textContent = `km berhasil dalam ${attempts} percobaan.`;
           return;  
         }
 
+        const selisih = Math.abs(tebakanNum - angkaRahasia);
+
+        if (selisih <= 2) {
+          feedback.textContent = "udah deket bangett!! 🔥";
+          feedback.style.color = "red";
+        } else if (selisih <= 5) {
+          feedback.textContent = "udah deket!! ✨";
+          feedback.style.color = "orange";
+        } else if (tebakanNum < angkaRahasia) {
+          feedback.textContent = "terlalu rendah!!";
+          feedback.style.color = "#ff80ab";
+        } else {
+          feedback.textContent = "ketinggiannnnn!";
+          feedback.style.color = "#ff80ab";
+        }
+
         attemptsText.textContent = `percobaan ke-${attempts}`;
       }
     </script>
-  </body>  
+  </body>
 </html>
