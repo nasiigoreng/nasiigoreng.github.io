@@ -6,6 +6,10 @@
   <title>Snake</title>
   <style>
     * {margin:0; padding:0; box-sizing:border-box;}
+    html, body {
+      overscroll-behavior-y: contain; /* cegah pull-to-refresh */
+      height: 100%;
+    }
     body {
       font-family: "Poppins", sans-serif;
       background: linear-gradient(135deg, rgb(240, 80, 176), #e780c8);
@@ -15,6 +19,7 @@
       min-height: 100vh;
       color: #fff;
       flex-direction: column;
+      overflow: hidden; /* cegah scroll */
     }
     .game-container {
       background: rgba(255, 255, 255, 0.85);
@@ -39,6 +44,7 @@
       margin: 15px 0;
       width: 100%;
       height: auto;
+      touch-action: none; /* biar swipe ga geser halaman */
     }
     .score {
       font-size: 16px;
@@ -210,23 +216,24 @@
       else if(e.key==="ArrowRight"&&dx!==-1){dx=1;dy=0;}
     });
 
-    // Swipe kontrol (HP)
+    // Swipe kontrol (HP) - dengan preventDefault biar ga scroll/refresh
     let touchStartX=0, touchStartY=0;
     document.addEventListener("touchstart", e=>{
       touchStartX = e.changedTouches[0].clientX;
       touchStartY = e.changedTouches[0].clientY;
-    });
+    }, {passive:false});
     document.addEventListener("touchend", e=>{
       let dxTouch = e.changedTouches[0].clientX - touchStartX;
       let dyTouch = e.changedTouches[0].clientY - touchStartY;
       if(Math.abs(dxTouch) > Math.abs(dyTouch)){ // horizontal
-        if(dxTouch > 30 && dx !== -1){ dx = 1; dy = 0; } // kanan
-        else if(dxTouch < -30 && dx !== 1){ dx = -1; dy = 0; } // kiri
+        if(dxTouch > 30 && dx !== -1){ dx = 1; dy = 0; }
+        else if(dxTouch < -30 && dx !== 1){ dx = -1; dy = 0; }
       } else { // vertical
-        if(dyTouch > 30 && dy !== -1){ dx = 0; dy = 1; } // bawah
-        else if(dyTouch < -30 && dy !== 1){ dx = 0; dy = -1; } // atas
+        if(dyTouch > 30 && dy !== -1){ dx = 0; dy = 1; }
+        else if(dyTouch < -30 && dy !== 1){ dx = 0; dy = -1; }
       }
-    });
+      e.preventDefault();
+    }, {passive:false});
 
     // Responsif canvas
     function resizeCanvas(){
